@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using AuthenticationAPI.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace AuthenticationAPI.Controllers
         /// </summary>
         /// <param name="userInfo"></param>
         /// <returns></returns>
-        private string GenerateJSONWebToken(LoginModel userInfo)
+        private string GenerateJSONWebToken(Login userInfo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -65,15 +66,15 @@ namespace AuthenticationAPI.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <returns></returns>
-        private async Task<LoginModel> AuthenticateUser(LoginModel login)
+        private async Task<Login> AuthenticateUser(Login login)
         {
-            LoginModel user = null;
+            Login user = null;
 
             //Validate the User Credentials    
             //Demo Purpose, I have Passed HardCoded User Information    
             if (login.UserName == "Jay")
             {
-                user = new LoginModel { UserName = "Jay", Password = "123456" };
+                user = new Login { UserName = "Jay", Password = "123456" };
             }
             return user;
         }
@@ -87,7 +88,7 @@ namespace AuthenticationAPI.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost(nameof(Login))]
-        public async Task<IActionResult> Login([FromBody] LoginModel data)
+        public async Task<IActionResult> Login([FromBody] Login data)
         {
             IActionResult response = Unauthorized();
             var user = await AuthenticateUser(data);
@@ -117,19 +118,5 @@ namespace AuthenticationAPI.Controllers
         #endregion
 
     }
-
-    #region JsonProperties
-    /// <summary>
-    /// Json Properties
-    /// </summary>
-    public class LoginModel
-    {
-        [Required]
-        public string UserName { get; set; }
-        [Required]
-        public string Password { get; set; }
-    }
-    #endregion
-
 }
 

@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore;
 
 
 namespace AuthenticationAPI
@@ -107,7 +107,7 @@ namespace AuthenticationAPI
             app.UseAuthentication();
             // Swagger Configuration in API
             app.UseSwagger();
-            app.UseSwagger(c =>
+            app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
 
